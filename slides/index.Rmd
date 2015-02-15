@@ -1,0 +1,72 @@
+---
+title       : Timber volume prediction
+subtitle    : Coursera Data Products course project
+author      : 
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+
+--- 
+
+## Introduction
+
+The application uses the _trees_ dataset (31 data points) to predict the volume of timber yielded by a black cherry tree as a function of it girth and height.
+
+---
+
+
+## Model
+
+
+If we approximated a tree to a cylinder, we would have:
+$$
+\huge { Volume = Constant \times Height \times Girth^{2} }
+$$
+Taking the log:
+$$
+\huge { log(Volume) = Constant^{\prime} + log(Height) + 2 . log(Girth) }
+$$
+
+So we fit (non-reactively) a log-linear model of the volume, which gives us coefficients close to what we'd expect:
+
+```{r}
+data(trees)
+fit <- lm(log(Volume) ~ log(Height) + log(Girth), data=trees )
+fit$coefficients
+```
+
+
+---
+
+## Reactive inputs
+
+The application has two numeric inputs, where we enter the height and girth of the tree whose volume we want to predict.
+
+For example, a height and girth of $\LARGE{76ft}$ and $\LARGE{12in}$ gives us a predicted volume of $\LARGE{ `r format(exp(predict(fit, data.frame(Girth=12, Height=76))), digits=4)  ` ft^3 }$.
+
+---
+
+## Results
+
+The prediction is reactively calculated once:
+```{r, eval=FALSE}
+prediction <- reactive(exp(predict(fit, data.frame(Girth=input$girth, Height=input$height))))
+```
+and displayed on two plots (Volume ~ Girth and Volume ~ Height), in relation with the data.
+
+```{r, echo=FALSE, fig.height=5, fig.align='center'}
+par(mfrow=c(1 ,2))
+pred <- exp(predict(fit, data.frame(Girth=12, Height=76)))
+
+plot(Volume ~ Girth, data = trees, col='black', xlab="Girth (in)", ylab="Volume (cubic ft)")
+points(12, pred, col='red', pch=19, cex=1.5)
+legend("topleft", legend=c("Training Data", "Prediction"), pch=c(1, 19), col=c('black', 'red'))
+
+plot(Volume ~ Height, data = trees, col='black', xlab="Height (ft)", ylab="Volume (cubic ft)")
+points(76, pred, col='red', pch=19, cex=1.5)
+legend("topleft", legend=c("Training Data", "Prediction"), pch=c(1, 19), col=c('black', 'red'))
+``` 
