@@ -24,11 +24,11 @@ The application uses the _trees_ dataset (31 data points) to predict the volume 
 
 If we approximated a tree to a cylinder, we would have:
 $$
-\huge { Volume = Constant \times Height \times Girth^{2} }
+Volume = Constant \times Height \times Girth^{2} 
 $$
 Taking the log:
 $$
-\huge { log(Volume) = Constant^{\prime} + log(Height) + 2 . log(Girth) }
+log(Volume) = Constant^{\prime} + log(Height) + 2 . log(Girth) 
 $$
 
 So we fit (non-reactively) a log-linear model of the volume, which gives us coefficients close to what we'd expect:
@@ -52,7 +52,7 @@ fit$coefficients
 
 The application has two numeric inputs, where we enter the height and girth of the tree whose volume we want to predict.
 
-For example, a height and girth of $\LARGE{76ft}$ and $\LARGE{12in}$ gives us a predicted volume of $\LARGE{ 22.94 ft^3 }$.
+For example, a height and girth of $76ft$ and $12in$ gives us a predicted volume of $22.94 ft^3$.
 
 ---
 
