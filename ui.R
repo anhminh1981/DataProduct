@@ -6,8 +6,9 @@
 #
 
 library(shiny)
+library(shinythemes)
 
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = shinytheme("cerulean"),
 
   # Application title
   titlePanel("Predictor of timber volume for black cherry trees"),
